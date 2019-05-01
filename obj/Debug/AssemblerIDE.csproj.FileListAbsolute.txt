@@ -1,0 +1,10 @@
+D:\Projects\C#\AssemblerIDE\bin\Debug\AssemblerIDE.exe.config
+D:\Projects\C#\AssemblerIDE\bin\Debug\AssemblerIDE.exe
+D:\Projects\C#\AssemblerIDE\bin\Debug\AssemblerIDE.pdb
+D:\Projects\C#\AssemblerIDE\obj\Debug\AssemblerIDE.csprojAssemblyReference.cache
+D:\Projects\C#\AssemblerIDE\obj\Debug\AssemblerIDE.Assembly.resources
+D:\Projects\C#\AssemblerIDE\obj\Debug\AssemblerIDE.Properties.Resources.resources
+D:\Projects\C#\AssemblerIDE\obj\Debug\AssemblerIDE.csproj.GenerateResource.cache
+D:\Projects\C#\AssemblerIDE\obj\Debug\AssemblerIDE.csproj.CoreCompileInputs.cache
+D:\Projects\C#\AssemblerIDE\obj\Debug\AssemblerIDE.exe
+D:\Projects\C#\AssemblerIDE\obj\Debug\AssemblerIDE.pdb
