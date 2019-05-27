@@ -1,0 +1,10 @@
+C:\Projects\Assembler-IDE\bin\Release\AssemblerIDE.exe.config
+C:\Projects\Assembler-IDE\bin\Release\AssemblerIDE.exe
+C:\Projects\Assembler-IDE\bin\Release\AssemblerIDE.pdb
+C:\Projects\Assembler-IDE\obj\Release\AssemblerIDE.csprojAssemblyReference.cache
+C:\Projects\Assembler-IDE\obj\Release\AssemblerIDE.Assembly.resources
+C:\Projects\Assembler-IDE\obj\Release\AssemblerIDE.Properties.Resources.resources
+C:\Projects\Assembler-IDE\obj\Release\AssemblerIDE.csproj.GenerateResource.cache
+C:\Projects\Assembler-IDE\obj\Release\AssemblerIDE.csproj.CoreCompileInputs.cache
+C:\Projects\Assembler-IDE\obj\Release\AssemblerIDE.exe
+C:\Projects\Assembler-IDE\obj\Release\AssemblerIDE.pdb

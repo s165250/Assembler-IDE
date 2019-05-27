@@ -17,11 +17,53 @@ namespace AssemblerIDE
             InitializeComponent();
             this.BackColor = Color.FromArgb(60, 63, 65);
             this.TextEditor.BackColor = Color.FromArgb(43, 43, 43);
-            this.TextEditor.SelectionColor = Color.FromArgb(204, 120, 50);
+            this.TextEditor.ForeColor = Color.FromArgb(169, 183, 198);
             this.TextEditor.AppendText((linecounter).ToString() + ".\t");
-            this.TextEditor.SelectionColor = Color.FromArgb(169, 183, 198);
-            this.menuStrip1.BackColor = this.BackColor = Color.FromArgb(60, 63, 65);
-            this.menuStrip1.ForeColor = Color.FromArgb(169, 183, 198);
+            this.richTextBox1.BackColor = Color.FromArgb(60, 63, 65);
+            this.richTextBox1.ForeColor = Color.FromArgb(169, 183, 198);
+            this.stepIND.BackColor = Color.FromArgb(60, 63, 65);
+            this.stepIND.ForeColor = Color.FromArgb(204, 120, 50);
+            this.ahTX.BackColor = Color.FromArgb(43, 43, 43);
+            this.alTX.BackColor = Color.FromArgb(43, 43, 43);
+            this.bhTX.BackColor = Color.FromArgb(43, 43, 43);
+            this.blTX.BackColor = Color.FromArgb(43, 43, 43);
+            this.chTX.BackColor = Color.FromArgb(43, 43, 43);
+            this.clTX.BackColor = Color.FromArgb(43, 43, 43);
+            this.dhTX.BackColor = Color.FromArgb(43, 43, 43);
+            this.dlTX.BackColor = Color.FromArgb(43, 43, 43);
+            this.ahTX.ForeColor = Color.FromArgb(204, 120, 50);
+            this.alTX.ForeColor = Color.FromArgb(204, 120, 50);
+            this.ahTX.ForeColor = Color.FromArgb(204, 120, 50);
+            this.bhTX.ForeColor = Color.FromArgb(204, 120, 50);
+            this.blTX.ForeColor = Color.FromArgb(204, 120, 50);
+            this.chTX.ForeColor = Color.FromArgb(204, 120, 50);
+            this.clTX.ForeColor = Color.FromArgb(204, 120, 50);
+            this.dhTX.ForeColor = Color.FromArgb(204, 120, 50);
+            this.dlTX.ForeColor = Color.FromArgb(204, 120, 50);
+            this.ahTX.SelectionAlignment = HorizontalAlignment.Center;
+            this.alTX.SelectionAlignment = HorizontalAlignment.Center;
+            this.bhTX.SelectionAlignment = HorizontalAlignment.Center;
+            this.blTX.SelectionAlignment = HorizontalAlignment.Center;
+            this.chTX.SelectionAlignment = HorizontalAlignment.Center;
+            this.clTX.SelectionAlignment = HorizontalAlignment.Center;
+            this.dhTX.SelectionAlignment = HorizontalAlignment.Center;
+            this.dlTX.SelectionAlignment = HorizontalAlignment.Center;
+            this.AH.Text = "00000000";
+            this.AL.Text = "00000000";
+            this.BH.Text = "00000000";
+            this.BL.Text = "00000000";
+            this.CH.Text = "00000000";
+            this.CL.Text = "00000000";
+            this.DH.Text = "00000000";
+            this.DL.Text = "00000000";
+            this.AH.SelectionAlignment = HorizontalAlignment.Center;
+            this.AL.SelectionAlignment = HorizontalAlignment.Center;
+            this.BH.SelectionAlignment = HorizontalAlignment.Center;
+            this.BL.SelectionAlignment = HorizontalAlignment.Center;
+            this.CH.SelectionAlignment = HorizontalAlignment.Center;
+            this.CL.SelectionAlignment = HorizontalAlignment.Center;
+            this.DH.SelectionAlignment = HorizontalAlignment.Center;
+            this.DL.SelectionAlignment = HorizontalAlignment.Center;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -86,9 +128,8 @@ namespace AssemblerIDE
             if (e.KeyChar == ENTER)
             {
                 e.Handled = true;
-                this.TextEditor.SelectionColor = Color.FromArgb(204, 120, 50);
-                this.TextEditor.AppendText((++linecounter).ToString() + ".\t");
                 this.TextEditor.SelectionColor = Color.FromArgb(169, 183, 198);
+                this.TextEditor.AppendText((++linecounter).ToString() + ".\t");
             }
             else if(e.KeyChar == BACKSPACE)
             {
@@ -103,16 +144,17 @@ namespace AssemblerIDE
                         linecounter--;
                     }
                 }
-                else
-                {
-                    this.TextEditor.SelectionColor = Color.FromArgb(169, 183, 198);
-                }
             }
         }
 
         private void TextEditor_TextChanged(object sender, EventArgs e)
         {
             builded = false;
+            if(this.TextEditor.Text == "" || this.TextEditor.Text == "1" || this.TextEditor.Text == "1.")
+            {
+                this.TextEditor.Text = "1.\t";
+                this.TextEditor.SelectionStart = this.TextEditor.Text.Length;
+            }
         }
 
         private void zapiszToolStripMenuItem_Click(object sender, EventArgs e)
@@ -185,35 +227,72 @@ namespace AssemblerIDE
         {
             System.IO.StreamReader reader = new System.IO.StreamReader(this.openFileDialog1.FileName, System.Text.Encoding.Unicode);
             string line = "";
-            string linenumber = "";
             this.TextEditor.Text = "";
+            linecounter = 1;
             while (true)
             {
                 line = reader.ReadLine();
                 if(line != null)
                 {
-                    linenumber = line.Substring(0, line.IndexOf("\t"));
-                    line = line.Substring(line.IndexOf("\t"));
-                    this.TextEditor.SelectionColor = Color.FromArgb(204, 120, 50);
-                    this.TextEditor.AppendText(linenumber);
-                    this.TextEditor.SelectionColor = Color.FromArgb(169, 183, 198);
-                    this.TextEditor.AppendText(line);
+                    if (line != "")
+                    {
+                        linecounter++;
+                    }
+                    this.TextEditor.AppendText(line + "\n");
                 }
                 else
                 {
                     break;
                 }
             }
+            this.TextEditor.Text = this.TextEditor.Text.Remove(0, 3);
+            this.TextEditor.Text.Remove(this.TextEditor.Text.Length - 4, 4);
+            this.TextEditor.SelectionStart = this.TextEditor.Text.Length;
+            this.TextEditor.AppendText(linecounter.ToString() + ".\t");
             reader.Close();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void pracaKrokowaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Console.WriteLine("Rejestr AX = " + registers[0].ToString() + "\n");
-            Console.WriteLine("Rejestr BX = " + registers[1].ToString() + "\n");
-            Console.WriteLine("Rejestr CX = " + registers[2].ToString() + "\n");
-            Console.WriteLine("Rejestr DX = " + registers[3].ToString() + "\n");
+            if(builded)
+            {
+                this.nextStep.Visible = true;
+                this.nextStep.Enabled = true;
+            }
+            else
+            {
+                MessageBox.Show("Najpierw należy skompilować program!", "Uwaga!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
 
+        private void nextStep_Click(object sender, EventArgs e)
+        {
+            string line = "";
+            if (currentStep == 0)
+            {
+                this.stepReader = new System.IO.StringReader(this.TextEditor.Text);
+                this.stepIND.Visible = true;
+            }
+            currentStep++;
+            this.stepIND.Text = "Aktualnie wykonywany rozkaz: " + currentStep.ToString();
+            line = this.stepReader.ReadLine();
+            if(line!=null)
+            {
+                line = line.Substring(line.IndexOf("\t") + 1);
+                executeOrder(line);
+            }
+            else
+            {
+                this.errorBox.AppendText("Zakończono wykonywanie programu!");
+                this.stepReader.Close();
+                currentStep = 0;
+                this.stepIND.Visible = false;
+            }
+        }
+
+        private void uruchomToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            button1_Click_1(null, null);
         }
     }
 }
