@@ -8,3 +8,13 @@ C:\Projects\Assembler-IDE\obj\Release\AssemblerIDE.csproj.GenerateResource.cache
 C:\Projects\Assembler-IDE\obj\Release\AssemblerIDE.csproj.CoreCompileInputs.cache
 C:\Projects\Assembler-IDE\obj\Release\AssemblerIDE.exe
 C:\Projects\Assembler-IDE\obj\Release\AssemblerIDE.pdb
+D:\Projects\C#\AssemblerIDE\bin\Release\AssemblerIDE.exe.config
+D:\Projects\C#\AssemblerIDE\bin\Release\AssemblerIDE.exe
+D:\Projects\C#\AssemblerIDE\bin\Release\AssemblerIDE.pdb
+D:\Projects\C#\AssemblerIDE\obj\Release\AssemblerIDE.csprojAssemblyReference.cache
+D:\Projects\C#\AssemblerIDE\obj\Release\AssemblerIDE.Assembly.resources
+D:\Projects\C#\AssemblerIDE\obj\Release\AssemblerIDE.Properties.Resources.resources
+D:\Projects\C#\AssemblerIDE\obj\Release\AssemblerIDE.csproj.GenerateResource.cache
+D:\Projects\C#\AssemblerIDE\obj\Release\AssemblerIDE.csproj.CoreCompileInputs.cache
+D:\Projects\C#\AssemblerIDE\obj\Release\AssemblerIDE.exe
+D:\Projects\C#\AssemblerIDE\obj\Release\AssemblerIDE.pdb
