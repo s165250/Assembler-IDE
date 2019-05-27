@@ -10,10 +10,13 @@ namespace AssemblerIDE
         /// </summary>
         private const char BACKSPACE = (char)8;
         private const char ENTER = (char)13;
+        private const int stackSize = 32;
+        private short SP = stackSize - 1;
         private int linecounter = 1;
         private int currentLine = 0;
         private int currentStep = 0;
         private int[] registers = new int[4];
+        private short[] STACK = new short[stackSize];
         private string LastChars = "0";
         private string ErrorList = "";
         private bool builded = false;
@@ -55,7 +58,7 @@ namespace AssemblerIDE
                                 if(operands[0] == "AX" || operands[0] == "BX" || operands[0] == "CX" || operands[0] == "DX")
                                 {
                                     int result;
-                                    if (operands[1] == "AX" || operands[1] == "BX" || operands[1] == "CX" || operands[1] == "DX" || int.TryParse(operands[1], out result))
+                                    if (operands[1] == "AX" || operands[1] == "BX" || operands[1] == "CX" || operands[1] == "DX" || int.TryParse(operands[1], out result) || int.TryParse(operands[1].Remove(operands[1].Length-1), System.Globalization.NumberStyles.HexNumber, System.Globalization.CultureInfo.CurrentCulture, out result))
                                     {
                                         return true;
                                     }
@@ -135,6 +138,66 @@ namespace AssemblerIDE
                                 return false;
                             }
                         }
+                    case "PUSH":
+                        {
+                            if (operandsNB == 1)
+                            {
+                                if (operands[0] == "AX" || operands[0] == "BX" || operands[0] == "CX" || operands[0] == "DX")
+                                {
+                                    return true;
+                                }
+                                else
+                                {
+                                    ErrorList += "Błąd operandów! Linia: " + currentLine.ToString() + "\n";
+                                    return false;
+                                }
+                            }
+                            else
+                            {
+                                ErrorList += "Błąd operandów! Linia: " + currentLine.ToString() + "\n";
+                                return false;
+                            }
+                        }
+                    case "POP":
+                        {
+                            if (operandsNB == 1)
+                            {
+                                if (operands[0] == "AX" || operands[0] == "BX" || operands[0] == "CX" || operands[0] == "DX")
+                                {
+                                    return true;
+                                }
+                                else
+                                {
+                                    ErrorList += "Błąd operandów! Linia: " + currentLine.ToString() + "\n";
+                                    return false;
+                                }
+                            }
+                            else
+                            {
+                                ErrorList += "Błąd operandów! Linia: " + currentLine.ToString() + "\n";
+                                return false;
+                            }
+                        }
+                    case "INT":
+                        {
+                            if(operandsNB == 1)
+                            {
+                                if(operands[0] == "21H")
+                                {
+                                    return true;
+                                }
+                                else
+                                {
+                                    ErrorList += "Błąd operandów! Linia: " + currentLine.ToString() + "\n";
+                                    return false;
+                                }
+                            }
+                            else
+                            {
+                                ErrorList += "Błąd operandów! Linia: " + currentLine.ToString() + "\n";
+                                return false;
+                            }
+                        }
                     default:
                         ErrorList += "Nieznany rozkaz! Linia: " + currentLine.ToString() + "\n";
                         return false;
@@ -191,7 +254,87 @@ namespace AssemblerIDE
 
             return numbers;
         }
-
+        private void interrupt21H()
+        {
+            switch(registers[0])
+            {
+                case 1:  // 1H Wyświetl podany z klawiatury znak
+                    {
+                        System.Console.WriteLine(System.Console.ReadKey(true).KeyChar);
+                        break;
+                    }
+                case 2:  // 2H Wyświetl char znajdujacy sie w DL
+                    {
+                        System.Console.WriteLine((char)registers[3]);
+                        break;
+                    }
+                case 3:  // 3H Uruchomienie cmd
+                    {
+                        System.Diagnostics.Process cmd = new System.Diagnostics.Process();
+                        System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+                        startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal;
+                        startInfo.FileName = "cmd.exe";
+                        cmd.StartInfo = startInfo;
+                        cmd.Start();
+                        break;
+                    }
+                case 25: // 19H Litera aktualnego dysku
+                    {
+                        char driveLetter = System.IO.Path.GetPathRoot(System.Environment.CurrentDirectory)[0];
+                        registers[0] = (int)driveLetter;
+                        break;
+                    }
+                case 42: // 2AH - Aktualna data do rejestru CX - rok, DH - miesiac, DL - dzien 
+                    {
+                        string time = System.DateTime.Now.ToString("MM/dd/yyyy");
+                        string[] times = time.Split('.');
+                        for(int i = 0; i<times.Length; i++)
+                        {
+                            System.Console.WriteLine(times[i]);
+                        }
+                        registers[2] = int.Parse(times[2]);
+                        registers[3] = int.Parse(times[0]) * 256 + int.Parse(times[1]);
+                        break;
+                    }
+                case 44: // 2CH - Aktualna godzina do rejestrów - CH - godzina, CL - minuty, DH - sekundy, DL - 1/100 sekundy (zwykle zero)
+                    {
+                        string time = System.DateTime.Now.ToString("HH:mm:ss");
+                        string[] times = time.Split(':');
+                        registers[2] = int.Parse(times[0]) * 256 + int.Parse(times[1]);
+                        registers[3] = int.Parse(times[2]) * 256;
+                        break;
+                    }
+                case 57: // 39H - Utworz katalog
+                    {
+                        System.IO.DirectoryInfo di = System.IO.Directory.CreateDirectory("./przyklad");
+                        break;
+                    }
+                case 73: // 49H -  Zerowanie rejestrów 
+                    {
+                        for(int i = 0; i< 4; i++)
+                        {
+                            registers[i] = 0;
+                        }
+                        break;
+                    }
+                case 76: // 4CH -  Wyłączenie aplikacji
+                    {
+                        Application.Exit();
+                        break;
+                    }
+                case 86: // 56H - Przeniesienie pliku
+                    {
+                        System.IO.File.Delete("./przeniesiony.txt");
+                        System.IO.File.Move("./doprzeniesienia.txt", "./przeniesiony.txt");
+                        break;
+                    }
+                case 237: // EDH - Usuwa dowolny plik, tutaj specjalnie przygotowany plik dousuniecia.txt
+                    {
+                        System.IO.File.Delete("./dousuniecia.txt");
+                        break;
+                    }
+            }
+        }
         void executeOrder(string line)
         {
             string[] operands;
@@ -214,6 +357,11 @@ namespace AssemblerIDE
             if (operands.Length == 2)
             {
                 if(int.TryParse(operands[1], out secondOperand))
+                {
+                    isSecondOperandRegister = false;
+                    secondOperand = secondOperand - 65535 * (secondOperand / 65535);
+                }
+                else if(int.TryParse(operands[1].Remove(operands[1].Length - 1), System.Globalization.NumberStyles.HexNumber, System.Globalization.CultureInfo.CurrentCulture, out secondOperand))
                 {
                     isSecondOperandRegister = false;
                     secondOperand = secondOperand - 65535 * (secondOperand / 65535);
@@ -262,6 +410,30 @@ namespace AssemblerIDE
                         else
                         {
                             this.registers[register[operands[0]]] -= secondOperand;
+                        }
+                        break;
+                    }
+                case "PUSH":
+                    {
+                        STACK[SP] = (short)this.registers[register[operands[0]]];
+                        SP--;
+                        break;
+                    }
+                case "POP":
+                    {
+                        SP++;
+                        this.registers[register[operands[0]]] = (int)STACK[SP];
+                        break;
+                    }
+                case "INT":
+                    {
+                        switch(operands[0])
+                        {
+                            case "21H":
+                                {
+                                    interrupt21H();
+                                    break;
+                                }
                         }
                         break;
                     }

@@ -287,6 +287,7 @@ namespace AssemblerIDE
                 this.stepReader.Close();
                 currentStep = 0;
                 this.stepIND.Visible = false;
+                this.nextStep.Visible = false;
             }
         }
 
